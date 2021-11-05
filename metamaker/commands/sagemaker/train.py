@@ -33,8 +33,9 @@ class TrainWithSagemakerCommand(SageMakerCommand):
         execution_role = "dummy/dummy" if args.local else config.training.execution_role
         instance_type = "local" if args.local else config.training.instance.type
         instance_count = 1 if args.local else config.training.instance.count
-        # dataset_path = f"file://{args.dataset_path.absolute()}" if args.local else config.metamaker.dataset_path
+        dataset_path = f"file://{args.dataset_path.absolute()}" if args.local else config.metamaker.dataset_path
         output_path = f"file://{args.artifact_path.absolute()}" if args.local else config.metamaker.artifact_path
+        inputs = {"dataset": dataset_path} if config.metamaker.dataset_path else None
 
         estimator = Estimator(
             image_uri=image_uri,
@@ -45,4 +46,4 @@ class TrainWithSagemakerCommand(SageMakerCommand):
             sagemaker_session=sagemaker_session,
         )
 
-        estimator.fit()
+        estimator.fit(inputs=inputs)
