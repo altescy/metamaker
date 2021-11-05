@@ -6,7 +6,7 @@ import uvicorn
 from metamaker import api
 from metamaker.commands.run.run import RunCommand
 from metamaker.config import Config
-from metamaker.handler import Handler
+from metamaker.metamaker import MetaMaker
 
 
 @RunCommand.register("serve")
@@ -37,7 +37,7 @@ class ServeCommand(RunCommand):
 
     def run(self, args: argparse.Namespace) -> None:
         config = Config.load_yaml(args.config)
-        handler = Handler.from_path(config.metamaker.handler)
+        handler = MetaMaker.from_path(config.metamaker.handler)
 
         app = api.create(handler=handler, artifact_path=args.artifact_path)
 

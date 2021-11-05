@@ -1,4 +1,5 @@
 from pathlib import Path
+import typing
 from typing import TypeVar
 
 import fastapi
@@ -24,10 +25,13 @@ def create(
     def invocations(data, request: fastapi.Request):  # type: ignore
         handler = request.app.state.handler
         model = request.app.state.model
-        return handler.predict(model, data)
+        return handler.predictor(model, data)
 
-    invocations.__annotations__["data"] = handler.predictor.__annotations__["data"]
-    invocations.__annotations__["return"] = handler.predictor.__annotations__["return"]
+    handler_annotation = getattr(handler, "__orig_class__")
+    _model_annotation, input_annotation, output_annotation = typing.get_args(handler_annotation)
+
+    invocations.__annotations__["data"] = input_annotation
+    invocations.__annotations__["return"] = output_annotation
 
     app.get("/ping")(ping)
     app.post("/invocations")(invocations)
