@@ -26,7 +26,6 @@ COPY pyproject.toml ./pyproject.toml
 COPY poetry.lock ./poetry.lock
 RUN poetry install --no-dev
 
-COPY metamaker.yaml ./metamaker.yaml
 {dependencies}
 
 {setup}
