@@ -3,7 +3,7 @@ from pathlib import Path
 
 from metamaker.commands.run.run import RunCommand
 from metamaker.config import Config
-from metamaker.handler import Handler
+from metamaker.metamaker import MetaMaker
 
 
 @RunCommand.register("train")
@@ -30,5 +30,5 @@ class TrainCommand(RunCommand):
     def run(self, args: argparse.Namespace) -> None:
         config = Config.load_yaml(args.config)
 
-        handler = Handler.from_path(config.metamaker.handler)
-        handler.train(args.dataset_path, args.artifact_path)
+        handler = MetaMaker.from_path(config.metamaker.handler)
+        handler.trainer(args.dataset_path, args.artifact_path)

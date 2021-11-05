@@ -1,3 +1,3 @@
 __version__ = "0.1.0"
 
-from metamaker.handler import Handler  # noqa: F401
+from metamaker.metamaker import MetaMaker  # noqa: F401
