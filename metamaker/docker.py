@@ -38,7 +38,7 @@ ENTRYPOINT {entrypoint}
 def generate_dockerfile(dependencies: List[str], setup: str, entrypoint: List[str]) -> str:
     return DOCKERFILE_TEMPLATE.format(
         dependencies="\n".join(f"COPY {name} ./{name}" for name in dependencies),
-        setup="\n".join(f"RUN {line.strip()}" for line in setup.strip().split("\n")),
+        setup="\n".join(f"RUN {line.strip()}" for line in setup.strip().split("\n")) if setup else "",
         entrypoint="[" + ", ".join(f'"{x}"' for x in entrypoint) + "]",
     ).strip()
 
