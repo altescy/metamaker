@@ -44,6 +44,7 @@ def generate_dockerfile(dependencies: List[str], setup: str, entrypoint: List[st
 
 
 def build_image(
+    handler: str,
     image_name: str,
     context_dir: Path,
     dependencies: Optional[List[str]] = None,
@@ -52,7 +53,7 @@ def build_image(
 ) -> None:
     dependencies = dependencies or []
     setup = setup or ""
-    entrypoint = entrypoint or ["poetry", "run", "metamaker", "run"]
+    entrypoint = entrypoint or ["poetry", "run", "metamaker", "run", handler]
 
     dockerfile = generate_dockerfile(
         dependencies=dependencies,
@@ -61,7 +62,7 @@ def build_image(
     )
 
     context_dir = context_dir.absolute()
-    dependencies += ["pyproject.toml", "poetry.lock", "metamaker.yaml"]
+    dependencies += ["pyproject.toml", "poetry.lock"]
     depenency_paths = [context_dir / name for name in dependencies]
 
     with tempfile.TemporaryDirectory() as tmpdir:

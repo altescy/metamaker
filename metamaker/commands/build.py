@@ -21,6 +21,7 @@ class BuildCommand(Subcommand):
         config = Config.load_yaml(config_path)
 
         build_image(
+            handler=config.handler,
             image_name=config.image.name,
             context_dir=args.workdir,
             dependencies=config.image.dependencies,

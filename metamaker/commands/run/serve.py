@@ -5,7 +5,6 @@ import uvicorn
 
 from metamaker import api
 from metamaker.commands.run.run import RunCommand
-from metamaker.config import Config
 from metamaker.metamaker import MetaMaker
 
 
@@ -29,15 +28,9 @@ class ServeCommand(RunCommand):
             type=Path,
             default=Path("/opt/ml/model/"),
         )
-        self.parser.add_argument(
-            "--config",
-            type=Path,
-            default=Path("./metamaker.yaml"),
-        )
 
     def run(self, args: argparse.Namespace) -> None:
-        config = Config.load_yaml(args.config)
-        handler = MetaMaker.from_path(config.metamaker.handler)
+        handler = MetaMaker.from_path(args.handler)
 
         app = api.create(handler=handler, artifact_path=args.artifact_path)
 

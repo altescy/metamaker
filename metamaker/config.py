@@ -5,12 +5,6 @@ import yaml
 from pydantic import BaseModel
 
 
-class MetaMakerConfig(BaseModel):
-    handler: str
-    dataset_path: str
-    artifact_path: str
-
-
 class ImageConfig(BaseModel):
     name: str
     dockerfile: Optional[str] = None
@@ -36,7 +30,9 @@ class InferenceConfig(BaseModel):
 
 
 class Config(BaseModel):
-    metamaker: MetaMakerConfig
+    handler: str
+    dataset_path: str
+    artifact_path: str
     image: ImageConfig
     training: TrainingConfig
     inference: InferenceConfig
