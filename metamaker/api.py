@@ -1,5 +1,5 @@
-from pathlib import Path
 import typing
+from pathlib import Path
 from typing import TypeVar
 
 import fastapi
@@ -19,15 +19,15 @@ def create(
     app.state.handler = handler
     app.state.model = handler.loader(artifact_path)
 
-    def ping() -> str:
+    async def ping() -> str:
         return "pong"
 
-    def invocations(data, request: fastapi.Request):  # type: ignore
+    async def invocations(data, request: fastapi.Request):  # type: ignore
         handler = request.app.state.handler
         model = request.app.state.model
         return handler.predictor(model, data)
 
-    handler_annotation = getattr(handler, "__orig_class__")
+    handler_annotation = getattr(handler, "__orig_class__")  # noqa: B009
     _model_annotation, input_annotation, output_annotation = typing.get_args(handler_annotation)
 
     invocations.__annotations__["data"] = input_annotation
