@@ -18,16 +18,17 @@ class TrainWithSagemakerCommand(SageMakerCommand):
     """train model with sagemaker"""
 
     def setup(self) -> None:
-        self.parser.add_argument("--config", type=Path, default=Path("metamaker.yaml"))
+        self.parser.add_argument("--deploy", action="store_true")
         self.parser.add_argument("--local", action="store_true")
         self.parser.add_argument("--dataset-path", type=Path, default=Path.cwd())
         self.parser.add_argument("--artifact-path", type=Path, default=Path.cwd())
+        self.parser.add_argument("--config", type=Path, default=Path("metamaker.yaml"))
 
     def run(self, args: argparse.Namespace) -> None:
         config = Config.load_yaml(args.config)
 
         boto_session = get_session()
-        sagemaker_session = sagemaker.Session(boto_session=boto_session)
+        sagemaker_session = None if args.local else sagemaker.Session(boto_session=boto_session)
 
         image_uri = get_image_uri(boto_session, config.image.name)
         execution_role = "dummy/dummy" if args.local else config.training.execution_role
@@ -47,3 +48,10 @@ class TrainWithSagemakerCommand(SageMakerCommand):
         )
 
         estimator.fit(inputs=inputs)
+
+        if args.deploy:
+            estimator.deploy(
+                endpoint_name=config.inference.endpoint_name,
+                instance_type=config.inference.instance.type,
+                initial_instance_count=config.inference.instance.count,
+            )
