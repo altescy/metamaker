@@ -8,7 +8,7 @@ from pathlib import Path
 from subprocess import PIPE, STDOUT, Popen
 from typing import List, Optional
 
-from metamaker.aws import get_account_id, get_session, get_profile
+from metamaker.aws import get_account_id, get_profile, get_session
 
 logger = getLogger(__name__)
 

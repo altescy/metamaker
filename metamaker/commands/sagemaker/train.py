@@ -9,7 +9,6 @@ from metamaker.aws import get_image_uri, get_session
 from metamaker.commands.sagemaker.sagemaker import SageMakerCommand
 from metamaker.config import Config
 
-
 logger = getLogger(__name__)
 
 
