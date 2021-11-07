@@ -39,7 +39,7 @@ def train(
     hyperparameters: Dict[str, Any],
 ) -> None:
     model = Model(**hyperparameters)
-    model.train(dataset_path)
+    model.train(dataset_path / "train.csv")
     model.save(artifact_path / "model.tar.gz")
 
 @app.add_loader
