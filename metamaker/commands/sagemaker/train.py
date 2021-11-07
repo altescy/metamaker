@@ -3,6 +3,7 @@ from logging import getLogger
 from pathlib import Path
 
 import sagemaker
+import yaml
 from sagemaker.estimator import Estimator
 
 from metamaker.aws import get_image_uri, get_session
@@ -37,11 +38,18 @@ class TrainWithSagemakerCommand(SageMakerCommand):
         output_path = f"file://{args.artifact_path.absolute()}" if args.local else config.artifact_path
         inputs = {"dataset": dataset_path} if config.dataset_path else None
 
+        if config.hyperparameter_path:
+            with open(config.hyperparameter_path) as yamlfile:
+                hyperparameters = yaml.safe_load(yamlfile)
+        else:
+            hyperparameters = None
+
         estimator = Estimator(
             image_uri=image_uri,
             role=execution_role,
             instance_type=instance_type,
             instance_count=instance_count,
+            hyperparameters=hyperparameters,
             output_path=output_path,
             sagemaker_session=sagemaker_session,
         )
