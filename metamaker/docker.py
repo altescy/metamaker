@@ -46,35 +46,49 @@ def build_image(
     handler: str,
     image_name: str,
     context_dir: Path,
-    dependencies: Optional[List[str]] = None,
+    *,
+    includes: Optional[List[str]] = None,
+    excludes: Optional[List[str]] = None,
     setup: Optional[str] = None,
     entrypoint: Optional[List[str]] = None,
 ) -> None:
-    dependencies = dependencies or []
+    includes = includes or []
     setup = setup or ""
     entrypoint = entrypoint or ["poetry", "run", "metamaker", "run", handler]
 
     dockerfile = generate_dockerfile(
-        dependencies=dependencies,
+        dependencies=includes,
         setup=setup,
         entrypoint=entrypoint,
     )
 
     context_dir = context_dir.absolute()
-    dependencies += ["pyproject.toml", "poetry.lock"]
-    depenency_paths = [context_dir / name for name in dependencies]
+    includes += ["pyproject.toml", "poetry.lock"]
+    include_paths = [context_dir / name for name in includes]
 
     with tempfile.TemporaryDirectory() as tmpdir:
         cwd = Path(tmpdir)
 
-        for path in depenency_paths:
+        for path in include_paths:
             if path.is_dir():
                 shutil.copytree(path, cwd / path.name)
             else:
                 shutil.copy(path, cwd / path.name)
 
-        with open(cwd / "Dockerfile", "w") as fp:
-            fp.write(dockerfile)
+        if (context_dir / "Dockerfile").exists():
+            shutil.copy(context_dir / "Dockerfile", cwd / "Dockerfile")
+        else:
+            with open(cwd / "Dockerfile", "w") as fp:
+                fp.write(dockerfile)
+
+        if (context_dir / ".dockerignre").exists():
+            shutil.copy(context_dir / ".dockerignore", cwd / ".dockerignore")
+
+        if excludes:
+            with open(cwd / ".dockerignore", "a") as fp:
+                fp.write("\n")
+                for line in excludes:
+                    fp.write(line.strip() + "\n")
 
         commands = [
             "docker",

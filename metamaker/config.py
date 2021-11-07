@@ -7,25 +7,26 @@ from pydantic import BaseModel
 
 class ImageConfig(BaseModel):
     name: str
-    dockerfile: Optional[str] = None
-    dependencies: Optional[List[str]] = None
+    includes: Optional[List[str]] = None
+    excludes: Optional[List[str]] = None
     setup: Optional[str] = None
     entrypoint: Optional[List[str]] = None
+    poetry_version: str = "latest"
 
 
-class EC2Config(BaseModel):
+class InstanceConfig(BaseModel):
     type: str
     count: int = 1
 
 
 class TrainingConfig(BaseModel):
-    instance: EC2Config
+    instance: InstanceConfig
     execution_role: str
     params: Optional[Dict[str, Any]] = None
 
 
 class InferenceConfig(BaseModel):
-    instance: EC2Config
+    instance: InstanceConfig
     endpoint_name: str
 
 

@@ -24,7 +24,8 @@ class BuildCommand(Subcommand):
             handler=config.handler,
             image_name=config.image.name,
             context_dir=args.workdir,
-            dependencies=config.image.dependencies,
+            includes=config.image.includes,
+            excludes=config.image.excludes,
             setup=config.image.setup,
             entrypoint=config.image.entrypoint,
         )
