@@ -12,10 +12,12 @@ metamaker enables you to:
 
 ## Usage
 
-1. Create poetry project and write your machine learning models
+1. Create poetry project and install metamaker
 
 ```
-poetry new your_module
+❯ poetry new your_module
+❯ cd your_module
+❯ poetry add git+https://github.com/altescy/metamaker
 ```
 
 2. Define scripts for traning and inference in `main.py`
@@ -31,15 +33,21 @@ from your_module import Model, Input, Output
 app = MetaMaker[Model, Input, Output]()
 
 @app.add_trainer
-def train(dataset_path: Path, artifact_path: Path, hyperparameters: Dict[str, Any]) -> None:
+def train(
+    dataset_path: Path,
+    artifact_path: Path,
+    hyperparameters: Dict[str, Any],
+) -> None:
     model = Model(**hyperparameters)
     model.train(dataset_path)
     model.save(artifact_path / "model.tar.gz")
 
-@app.add_loader(artifact_path: Path) -> Model:
+@app.add_loader
+def (artifact_path: Path) -> Model:
     return Model.load(artifact_path / "model.tar.gz")
 
-@app.add_predictor(model: Model, data: Input) -> Output:
+@app.add_predictor
+def predict(model: Model, data: Input) -> Output:
     return model.predict(data)
 ```
 
