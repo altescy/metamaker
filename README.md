@@ -43,7 +43,7 @@ def train(
     model.save(artifact_path / "model.tar.gz")
 
 @app.add_loader
-def (artifact_path: Path) -> Model:
+def load(artifact_path: Path) -> Model:
     return Model.load(artifact_path / "model.tar.gz")
 
 @app.add_predictor
