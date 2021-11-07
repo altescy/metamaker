@@ -32,7 +32,7 @@ from your_module import Model, Input, Output
 
 app = MetaMaker[Model, Input, Output]()
 
-@app.add_trainer
+@app.trainer
 def train(
     dataset_path: Path,
     artifact_path: Path,
@@ -42,11 +42,11 @@ def train(
     model.train(dataset_path / "train.csv")
     model.save(artifact_path / "model.tar.gz")
 
-@app.add_loader
+@app.loader
 def load(artifact_path: Path) -> Model:
     return Model.load(artifact_path / "model.tar.gz")
 
-@app.add_predictor
+@app.predictor
 def predict(model: Model, data: Input) -> Output:
     return model.predict(data)
 ```

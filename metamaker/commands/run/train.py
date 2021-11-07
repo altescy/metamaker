@@ -31,7 +31,7 @@ class TrainCommand(RunCommand):
     def run(self, args: argparse.Namespace) -> None:
         handler = MetaMaker.from_path(args.handler)
         hyperparameters = self._load_hyperparameters(args.hyperparameter_path)
-        handler.trainer(args.dataset_path, args.artifact_path, hyperparameters)
+        handler.train(args.dataset_path, args.artifact_path, hyperparameters)
 
     @staticmethod
     def _load_hyperparameters(path: Path) -> Dict[str, Any]:

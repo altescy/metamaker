@@ -22,35 +22,35 @@ class MetaMaker(Generic[Model, Input, Output]):
         self._predictor: Optional[Callable[[Model, Input], Output]] = None
 
     @property
-    def trainer(self) -> Callable[[Path, Path, Dict[str, Any]], None]:
+    def train(self) -> Callable[[Path, Path, Dict[str, Any]], None]:
         assert self._trainer is not None
         return self._trainer
 
     @property
-    def loader(self) -> Callable[[Path], Model]:
+    def load(self) -> Callable[[Path], Model]:
         assert self._loader is not None
         return self._loader
 
     @property
-    def predictor(self) -> Callable[[Model, Input], Output]:
+    def predict(self) -> Callable[[Model, Input], Output]:
         assert self._predictor is not None
         return self._predictor
 
-    def add_trainer(
+    def trainer(
         self,
         func: Callable[[Path, Path, Dict[str, Any]], None],
     ) -> Callable[[Path, Path, Dict[str, Any]], None]:
         self._trainer = func
         return func
 
-    def add_loader(
+    def loader(
         self,
         func: Callable[[Path], Model],
     ) -> Callable[[Path], Model]:
         self._loader = func
         return func
 
-    def add_predictor(
+    def predictor(
         self,
         func: Callable[[Model, Input], Output],
     ) -> Callable[[Model, Input], Output]:
