@@ -63,7 +63,7 @@ image:
   name: metamaker
   includes:
     - your_module/
-    - your_script.py
+    - main.py
   excludes:
     - __pycache__/
     - '*.py[cod]'
