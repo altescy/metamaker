@@ -51,7 +51,7 @@ def predict(model: Model, data: Input) -> Output:
     return model.predict(data)
 ```
 
-3. Setup metamaker config file in `metamaker.yaml`
+3. Write metamaker configs in `metamaker.yaml`
 
 ```metamaker.yaml
 handler: main:app
