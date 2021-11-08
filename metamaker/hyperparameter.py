@@ -2,7 +2,6 @@ import copy
 import json
 from typing import Any, Dict, Optional
 
-
 SERIALIZEDKEY = "%%serialized%%"
 SEPARATOR = "."
 
