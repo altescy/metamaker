@@ -19,7 +19,15 @@ IMAGE_URI_TEMPLATE = "{account}.dkr.ecr.{region}.amazonaws.com/{image}:{version}
 DOCKERFILE_TEMPLATE = """
 FROM python:{python_version}-slim
 
-RUN pip install --no-cache-dir --upgrade poetry=={poetry_version}
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        bzip2 \
+        build-essential \
+        cmake \
+        git-core \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --upgrade poetry=={poetry_version}
 
 WORKDIR /app
 
@@ -31,6 +39,7 @@ RUN poetry install --no-dev
 
 {setup}
 
+EXPOSE 8080
 ENTRYPOINT {entrypoint}
 """
 
