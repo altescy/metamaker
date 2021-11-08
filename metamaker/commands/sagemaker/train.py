@@ -1,11 +1,13 @@
 import argparse
 from logging import getLogger
 from pathlib import Path
+from typing import Dict, Optional
 
 import sagemaker
 import yaml
 from sagemaker.estimator import Estimator
 
+from metamaker import hyperparameter
 from metamaker.aws import get_image_uri, get_session
 from metamaker.commands.sagemaker.sagemaker import SageMakerCommand
 from metamaker.config import Config
@@ -38,11 +40,10 @@ class TrainWithSagemakerCommand(SageMakerCommand):
         output_path = f"file://{args.artifact_path.absolute()}" if args.local else config.artifact_path
         inputs = {"dataset": dataset_path} if config.dataset_path else None
 
+        hyperparameters: Optional[Dict[str, str]] = None
         if config.hyperparameter_path:
             with open(config.hyperparameter_path) as yamlfile:
-                hyperparameters = yaml.safe_load(yamlfile)
-        else:
-            hyperparameters = None
+                hyperparameters = hyperparameter.serialize(yaml.safe_load(yamlfile))
 
         estimator = Estimator(
             image_uri=image_uri,

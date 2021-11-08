@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 import yaml
 
+from metamaker import hyperparameter
 from metamaker.commands.run.run import RunCommand
 from metamaker.metamaker import MetaMaker
 
@@ -39,4 +40,4 @@ class TrainCommand(RunCommand):
         with path.open() as fp:
             hyperparameters = yaml.safe_load(fp)
             assert isinstance(hyperparameters, dict)
-            return hyperparameters
+            return hyperparameter.deserialize(hyperparameters)
