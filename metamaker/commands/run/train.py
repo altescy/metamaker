@@ -1,7 +1,8 @@
 import argparse
-import json
 from pathlib import Path
 from typing import Any, Dict
+
+import yaml
 
 from metamaker.commands.run.run import RunCommand
 from metamaker.metamaker import MetaMaker
@@ -35,7 +36,7 @@ class TrainCommand(RunCommand):
 
     @staticmethod
     def _load_hyperparameters(path: Path) -> Dict[str, Any]:
-        with path.open() as jsonfile:
-            hyperparameters = json.load(jsonfile)
+        with path.open() as fp:
+            hyperparameters = yaml.safe_load(fp)
             assert isinstance(hyperparameters, dict)
             return hyperparameters
