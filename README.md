@@ -1,7 +1,7 @@
 metamaker
 =========
 
-[![Actions Status](https://github.com/altescy/metamaker/workflows/CI/badge.svg)](https://github.com/altescy/metamaker/actions/workflows/main.yml)
+[![Actions Status](https://github.com/altescy/metamaker/workflows/CI/badge.svg)](https://github.com/altescy/metamaker/actions/workflows/main.yaml)
 [![License](https://img.shields.io/github/license/altescy/metamaker)](https://github.com/altescy/metamaker/blob/master/LICENSE)
 
 Simple command line tool to train and deploy your machine learning models with AWS SageMaker
