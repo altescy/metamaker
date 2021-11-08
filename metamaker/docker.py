@@ -8,6 +8,7 @@ from pathlib import Path
 from subprocess import PIPE, STDOUT, Popen
 from typing import List, Optional
 
+from metamaker import poetry
 from metamaker.aws import get_account_id, get_profile, get_session
 
 logger = getLogger(__name__)
@@ -16,9 +17,9 @@ logger = getLogger(__name__)
 IMAGE_URI_TEMPLATE = "{account}.dkr.ecr.{region}.amazonaws.com/{image}:{version}"
 
 DOCKERFILE_TEMPLATE = """
-FROM python:3.8-slim
+FROM python:{python_version}-slim
 
-RUN pip install --no-cache-dir --upgrade poetry
+RUN pip install --no-cache-dir --upgrade poetry=={poetry_version}
 
 WORKDIR /app
 
@@ -34,8 +35,16 @@ ENTRYPOINT {entrypoint}
 """
 
 
-def generate_dockerfile(dependencies: List[str], setup: str, entrypoint: List[str]) -> str:
+def generate_dockerfile(
+    python_version: str,
+    poetry_version: str,
+    dependencies: List[str],
+    setup: str,
+    entrypoint: List[str],
+) -> str:
     return DOCKERFILE_TEMPLATE.format(
+        python_version=python_version,
+        poetry_version=poetry_version,
         dependencies="\n".join(f"COPY {name} ./{name}" for name in dependencies),
         setup="\n".join(f"RUN {line.strip()}" for line in setup.strip().split("\n")) if setup else "",
         entrypoint="[" + ", ".join(f'"{x}"' for x in entrypoint) + "]",
@@ -56,11 +65,18 @@ def build_image(
     setup = setup or ""
     entrypoint = entrypoint or ["poetry", "run", "metamaker", "run", handler]
 
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    poetry_version = "{}.{}.{}".format(*poetry.get_version())
+
     dockerfile = generate_dockerfile(
+        python_version=python_version,
+        poetry_version=poetry_version,
         dependencies=includes,
         setup=setup,
         entrypoint=entrypoint,
     )
+
+    logger.info("Generated dockerfile:\n%s", dockerfile)
 
     context_dir = context_dir.absolute()
     includes += ["pyproject.toml", "poetry.lock"]
