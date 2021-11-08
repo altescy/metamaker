@@ -11,7 +11,6 @@ class ImageConfig(BaseModel):
     excludes: Optional[List[str]] = None
     setup: Optional[str] = None
     entrypoint: Optional[List[str]] = None
-    poetry_version: str = "latest"
 
 
 class InstanceConfig(BaseModel):
@@ -31,12 +30,12 @@ class InferenceConfig(BaseModel):
 
 class Config(BaseModel):
     handler: str
-    dataset_path: str
     artifact_path: str
-    hyperparameter_path: str
     image: ImageConfig
     training: TrainingConfig
     inference: InferenceConfig
+    dataset_path: Optional[str] = None
+    hyperparameter_path: Optional[str] = None
 
     @classmethod
     def load_yaml(cls, path: Path) -> "Config":
