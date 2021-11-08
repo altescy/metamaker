@@ -23,7 +23,7 @@ metamaker enables you to:
 ```
 ❯ poetry new your_module
 ❯ cd your_module
-❯ poetry add git+https://github.com/altescy/metamaker#main
+❯ poetry add metamaker
 ```
 
 2. Define scripts for traning and inference in `main.py`
