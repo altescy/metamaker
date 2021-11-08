@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "metamaker"
 version = "0.1.0"
-description = ""
+description = "Simple CLI to train and deploy your ML models with AWS SageMaker"
 authors = ["altescy <altescy@fastmail.com>"]
+license = "MIT License"
+readme = "README.md"
+homepage = "https://github.com/altescy/metamaker"
+keywords=["python", "machine-learning", "sagemaker"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
