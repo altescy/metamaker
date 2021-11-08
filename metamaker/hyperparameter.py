@@ -9,7 +9,7 @@ SEPARATOR = "."
 
 def serialize(data: Dict[str, Any]) -> Dict[str, str]:
     ret = _serialize(data)
-    ret[SERIALIZEDKEY] = ""
+    ret[SERIALIZEDKEY] = "true"
     return ret
 
 
