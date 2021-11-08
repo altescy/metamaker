@@ -69,6 +69,7 @@ def build_image(
     excludes: Optional[List[str]] = None,
     setup: Optional[str] = None,
     entrypoint: Optional[List[str]] = None,
+    no_cache: bool = False,
 ) -> None:
     includes = includes or []
     setup = setup or ""
@@ -124,6 +125,10 @@ def build_image(
             str(cwd / "Dockerfile"),
             ".",
         ]
+
+        if no_cache:
+            commands.append("--no-cache")
+
         proc = Popen(
             commands,
             cwd=context_dir,

@@ -13,6 +13,7 @@ class BuildCommand(Subcommand):
     def setup(self) -> None:
         self.parser.add_argument("workdir", type=Path, default=Path.cwd())
         self.parser.add_argument("--push", action="store_true")
+        self.parser.add_argument("--no-cache", action="store_true")
         self.parser.add_argument("--config", type=Path, default=None)
 
     def run(self, args: argparse.Namespace) -> None:
@@ -28,6 +29,7 @@ class BuildCommand(Subcommand):
             excludes=config.image.excludes,
             setup=config.image.setup,
             entrypoint=config.image.entrypoint,
+            no_cache=args.no_cache,
         )
 
         if args.push:
