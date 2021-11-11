@@ -35,11 +35,12 @@ from typing import Any, Dict
 from metamaker import MetaMaker
 
 # Import your model, and input/output data classs:
+#
 #   Model  ... machine learning model class you want to use
 #   Input  ... input data class for inference
 #   Output ... ouput data class for inference
 #
-# Note that the Input and Output class are used as type hints to
+# Note that the Input and Output are used as type hints to
 # create API endpoint with FastAPI like below:
 #
 #   @fastapi_app.post("/invocations")
