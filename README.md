@@ -74,6 +74,7 @@ def predict(model: Model, data: Input) -> Output:
 # Specify metamaker handler like: `path.to.module:app_name`
 handler: main:app
 
+# dataset_path and artifact_path should be directories and end with '/'
 dataset_path: s3://your-bucket/path/to/dataset/
 artifact_path: s3://your-bucket/path/to/artifacts/
 
