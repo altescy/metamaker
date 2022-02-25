@@ -112,5 +112,5 @@ metamaker build --deploy .
 5. Train your model with SageMaker and deploy endpoint
 
 ```
-metamker sagemaker train --deploy
+metamaker sagemaker train --deploy
 ```
